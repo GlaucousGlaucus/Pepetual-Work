@@ -40,3 +40,38 @@ Yaw = 0 when the head is looking straight.
      // Lolz at your NPE, going to throw you whatever set distance forward in the hope to ignore your NPE
      player.moveEntity(-distance*Math.sin(Math.toRadians(player.rotationYawHead))*Math.cos(Math.toRadians(player.rotationPitch)),-distance*Math.sin(Math.toRadians(player.rotationPitch)), distance*Math.cos(Math.toRadians(player.rotationYawHead))*Math.cos(Math.toRadians(player.rotationPitch)));
      }
+
+     I think the methods all use radians instead of degrees. There are 360 degrees in a complete circle and there are 2 pi radians (6.283) radians in a full circle.
+
+     radians = degrees * ( pi / 180 ) = 0.0174 radians per degree
+
+
+                          //player.abilities.invulnerable = true;
+                          WitherSkullEntity entity = new WitherSkullEntity(world, player, player.getX(), player.getY() + 2, player.getZ());
+                          entity.shootFromRotation(player, player.xRot, player.yRot, 0, 1.5F, 1F);
+                          world.addFreshEntity(entity);
+                          counter++;
+                          if (counter == 10) {
+                          player.sendMessage(new StringTextComponent("POG"), player.getUUID());
+                          counter = 0;
+                          }
+
+
+    int distance = 5;
+                double x = -distance*Math.sin(Math.toRadians(player.xRot))*Math.cos(Math.toRadians(player.yRot));
+                double y = -distance*Math.sin(Math.toRadians(player.yRot));
+                double z = distance*Math.cos(Math.toRadians(player.xRot))*Math.cos(Math.toRadians(player.yRot));
+
+                /**
+                 *
+                 * Works only in 1st quadrant ie +x and +z
+                 *
+                 * */
+                player.moveTo(player.getX() + x,
+                        player.getY() + y,
+                        player.getZ() + z);
+
+
+IMP : ENTITY RAYTRACE = ENTITY.PICK()
+
+btw it takes 140 lines of code to make a hyperion
