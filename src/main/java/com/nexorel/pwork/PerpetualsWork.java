@@ -1,6 +1,9 @@
 package com.nexorel.pwork;
 
+import com.nexorel.pwork.Setup.ClientSetup;
+import com.nexorel.pwork.content.blocks.WitherFurnace.WitherFurnaceScreen;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,24 +23,16 @@ public class PerpetualsWork
 
     public PerpetualsWork() {
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-
         /**For registration of stuff**/
         PRegister.initialization();
 
-        MinecraftForge.EVENT_BUS.register(this);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::clientSetup);
     }
 
     private void setup(final FMLCommonSetupEvent event)
     {
        //oregen stup here
-    }
-
-
-    private void clientSetup(final FMLClientSetupEvent event)
-    {
-       // RenderingRegistry.registerEntityRenderingHandler(PRegister.NEXORELS_HEADO.get(), NexorelsHeadoRenderer::new);
     }
 
     public static final ItemGroup PERPETUALS_WORK = new ItemGroup("perpetuals_work") {

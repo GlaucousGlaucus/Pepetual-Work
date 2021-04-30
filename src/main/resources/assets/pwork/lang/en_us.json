@@ -1,5 +1,8 @@
 {
     "item.pwork.nexorels_staff": "Nexorel's Staff",
+    "block.pwork.wither_furnace": "Wither Furnace",
+
+    "gui_title.wither_furnace": "Wither Furnace",
 
     "itemGroup.perpetuals_work": "Perpetual's Work... Yeah"
 }
