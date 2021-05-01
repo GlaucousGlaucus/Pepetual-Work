@@ -14,15 +14,55 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class WitheringRecipe extends SingleItemRecipe {
+public class WitheringRecipe implements IRecipe<IInventory> {
 
-    public WitheringRecipe(ResourceLocation RecipeId, Ingredient ingredient, ItemStack result) {
-        super(PRegister.WITHERING_TYPE, PRegister.WITHERING.get(), RecipeId, "", ingredient, result);
+    protected final Ingredient ingredient;
+    protected final ItemStack result;
+    private final IRecipeType<?> type;
+    private final IRecipeSerializer<?> serializer;
+    protected final ResourceLocation id;
+
+    public WitheringRecipe( ResourceLocation Recipeid, Ingredient ingredient, ItemStack result) {
+        this.ingredient = ingredient;
+        this.result = result;
+        this.type = PRegister.WITHERING_TYPE;
+        this.serializer = PRegister.WITHERING.get();
+        this.id = Recipeid;
     }
 
     @Override
     public boolean matches(IInventory inv, World world) {
         return this.ingredient.test(inv.getItem(0));
+    }
+
+    @Override
+    public ItemStack assemble(IInventory p_77572_1_) {
+        return this.result.copy();
+    }
+
+    @Override
+    public boolean canCraftInDimensions(int p_194133_1_, int p_194133_2_) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getResultItem() {
+        return this.result;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return this.id;
+    }
+
+    @Override
+    public IRecipeSerializer<?> getSerializer() {
+        return PRegister.WITHERING.get();
+    }
+
+    @Override
+    public IRecipeType<?> getType() {
+        return PRegister.WITHERING_TYPE;
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<WitheringRecipe> {

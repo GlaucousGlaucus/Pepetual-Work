@@ -4,12 +4,10 @@ import com.nexorel.pwork.PRegister;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,8 +15,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-
-import javax.annotation.Nullable;
 
 public class WitherFurnaceContainer extends Container {
 
@@ -34,9 +30,9 @@ public class WitherFurnaceContainer extends Container {
 
         if (tileEntity != null) {
             tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                addSlot(new SlotItemHandler(h, 0, 66, 47));
-                addSlot(new SlotItemHandler(h, 1, 126, 73));
-                addSlot(new SlotItemHandler(h, 2, 127, 48));
+                addSlot(new SlotItemHandler(h, 0, 50, 31)); // Input 1
+                addSlot(new SlotItemHandler(h, 1, 110, 57)); // Output
+                addSlot(new SlotItemHandler(h, 2, 110, 31)); // Input 2
             });
         }
         layoutPlayerInventorySlots(8,84);

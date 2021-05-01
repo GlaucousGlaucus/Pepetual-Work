@@ -60,12 +60,11 @@ public class WitherFurnaceBlock extends Block {
 
     private void interactWith(World world, BlockPos pos, PlayerEntity player) {
         TileEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof WitherFurnaceTile && player instanceof ServerPlayerEntity) {
-            WitherFurnaceTile te = (WitherFurnaceTile) tileEntity;
+        if (tileEntity instanceof AbstractWitherFurnaceTile && player instanceof ServerPlayerEntity) {
+            AbstractWitherFurnaceTile te = (AbstractWitherFurnaceTile) tileEntity;
             NetworkHooks.openGui((ServerPlayerEntity) player, te, te::encodeExtraData);
         }
     }
-
 
     @SuppressWarnings("deprecation")
     @Override
