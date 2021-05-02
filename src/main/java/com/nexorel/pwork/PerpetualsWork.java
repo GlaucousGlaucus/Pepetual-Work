@@ -21,6 +21,7 @@ import static com.nexorel.pwork.Reference.MOD_ID;
 @Mod("pwork")
 public class PerpetualsWork
 {
+
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 

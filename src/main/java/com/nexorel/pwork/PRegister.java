@@ -1,11 +1,10 @@
 package com.nexorel.pwork;
 
-import com.nexorel.pwork.content.blocks.WitherFurnace.AbstractWitherFurnaceTile;
-import com.nexorel.pwork.content.blocks.WitherFurnace.WitherFurnaceTile;
 import com.nexorel.pwork.content.blocks.WitherFurnace.WitherFurnaceContainer;
 import com.nexorel.pwork.content.Entities.NexorelsHeado;
 import com.nexorel.pwork.content.Recipes.WitheringRecipe;
 import com.nexorel.pwork.content.blocks.WitherFurnace.WitherFurnaceBlock;
+import com.nexorel.pwork.content.blocks.WitherFurnace.WitherFurnaceTile;
 import com.nexorel.pwork.content.items.NexorelsStaff;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
@@ -77,7 +76,7 @@ public class PRegister {
     //Recipes
     public static final RegistryObject<IRecipeSerializer<?>> WITHERING = RECIPE_SERIALIZER.register("withering", WitheringRecipe.Serializer::new);
 
-    public static final IRecipeType<WitheringRecipe> WITHERING_TYPE = IRecipeType.register(MOD_ID + "withering");
+    public static final IRecipeType<WitheringRecipe> WITHERING_TYPE = IRecipeType.register("pwork:withering");
 
 
 }

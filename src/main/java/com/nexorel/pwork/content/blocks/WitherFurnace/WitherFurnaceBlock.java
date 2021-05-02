@@ -6,9 +6,12 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -51,19 +54,27 @@ public class WitherFurnaceBlock extends Block {
     @SuppressWarnings("deprecation")
     @Override
     public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
-        if (world.isClientSide) {
+        if (!world.isClientSide) {
+            TileEntity tileEntity = world.getBlockEntity(pos);
+            if (tileEntity instanceof WitherFurnaceTile) {
+                INamedContainerProvider containerProvider = new INamedContainerProvider() {
+                    @Override
+                    public ITextComponent getDisplayName() {
+                        return new TranslationTextComponent("screen.pwork.wither_furnace");
+                    }
+
+                    @Nullable
+                    @Override
+                    public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+                        return new WitherFurnaceContainer(windowID, world, pos, playerInventory, playerEntity);
+                    }
+                };
+                NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getBlockPos());
+            }
             return ActionResultType.SUCCESS;
         }
-        this.interactWith(world, pos, player);
-        return ActionResultType.CONSUME;
-    }
 
-    private void interactWith(World world, BlockPos pos, PlayerEntity player) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof AbstractWitherFurnaceTile && player instanceof ServerPlayerEntity) {
-            AbstractWitherFurnaceTile te = (AbstractWitherFurnaceTile) tileEntity;
-            NetworkHooks.openGui((ServerPlayerEntity) player, te, te::encodeExtraData);
-        }
+        return ActionResultType.CONSUME;
     }
 
     @SuppressWarnings("deprecation")
