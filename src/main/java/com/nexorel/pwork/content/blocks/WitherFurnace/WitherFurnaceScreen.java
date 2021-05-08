@@ -17,6 +17,8 @@ public class WitherFurnaceScreen extends ContainerScreen<WitherFurnaceContainer>
         super(container, playerInventory, name);
     }
 
+
+
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
@@ -37,5 +39,9 @@ public class WitherFurnaceScreen extends ContainerScreen<WitherFurnaceContainer>
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+
+        final WitherFurnaceTile tile = menu.tileEntity;
+        int l = this.menu.getSmeltProgressionScaled();
+        this.blit(matrixStack, relX + 73, relY + 31, 176, 14, l + 1, 16);
     }
 }

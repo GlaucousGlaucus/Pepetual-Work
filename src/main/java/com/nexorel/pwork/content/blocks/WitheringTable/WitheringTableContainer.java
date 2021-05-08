@@ -1,4 +1,4 @@
-package com.nexorel.pwork.content.blocks.WitherFurnace;
+package com.nexorel.pwork.content.blocks.WitheringTable;
 
 import com.nexorel.pwork.PRegister;
 import net.minecraft.entity.player.PlayerEntity;
@@ -7,44 +7,46 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IWorldPosCallable;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class WitherFurnaceContainer extends Container {
+public class WitheringTableContainer extends Container {
 
-    public WitherFurnaceTile tileEntity;
+    public WitheringTableTile tileEntity;
     private PlayerEntity player;
     private IItemHandler playerinv;
-    private int progress;
-    private int MaxTime;
 
-    public WitherFurnaceContainer(int windowID, PlayerInventory playerInventory, PlayerEntity player, final WitherFurnaceTile tile) {
-        super(PRegister.WITHER_FURNACE_CONTAINER.get(), windowID);
+    public WitheringTableContainer(int windowID, PlayerInventory playerInventory, PlayerEntity player, final WitheringTableTile tile) {
+        super(PRegister.WITHER_CRAFTING_TABLE_CONTAINER.get(), windowID);
 
         this.tileEntity = tile;
         this.player = player;
         this.playerinv = new InvWrapper(playerInventory);
-        this.progress = tileEntity.currentProgress;
-        this.MaxTime = tileEntity.MaxProgressTime;
 
         if (tileEntity != null) {
             tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                addSlot(new SlotItemHandler(h, 0, 50, 31)); // Input 1
-                addSlot(new SlotItemHandler(h, 1, 110, 57)); // Output
-                addSlot(new SlotItemHandler(h, 2, 110, 31)); // Input 2
+                addSlot(new SlotItemHandler(h, 0, 124, 35)); // result
+
+                addSlot(new SlotItemHandler(h, 1, 30, 17));
+                addSlot(new SlotItemHandler(h, 2, 48, 17));
+                addSlot(new SlotItemHandler(h, 3, 66, 17));
+                addSlot(new SlotItemHandler(h, 4, 30, 35));
+                addSlot(new SlotItemHandler(h, 5, 48, 35));
+                addSlot(new SlotItemHandler(h, 6, 66, 35));
+                addSlot(new SlotItemHandler(h, 7, 30, 53));
+                addSlot(new SlotItemHandler(h, 8, 48, 53));
+                addSlot(new SlotItemHandler(h, 9, 66, 53));
+
             });
         }
         layoutPlayerInventorySlots(8,84);
-
     }
 
     @Override
-    public boolean stillValid(PlayerEntity p_75145_1_) {
-        return stillValid(IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos()), player, PRegister.WITHER_FURNACE.get());
+    public boolean stillValid(PlayerEntity player) {
+        return stillValid(IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos()), player, PRegister.WITHER_CRAFTING_TABLE.get());
     }
 
     @Override
@@ -60,7 +62,7 @@ public class WitherFurnaceContainer extends Container {
                 }
                 slot.onQuickCraft(stack, itemstack);
             } else {
-                 if (index < 28) {
+                if (index < 28) {
                     if (!this.moveItemStackTo(stack, 28, 37, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -85,8 +87,6 @@ public class WitherFurnaceContainer extends Container {
         return itemstack;
     }
 
-
-
     private int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
         for (int i = 0 ; i < amount ; i++) {
             addSlot(new SlotItemHandler(handler, index, x, y));
@@ -106,18 +106,10 @@ public class WitherFurnaceContainer extends Container {
 
     private void layoutPlayerInventorySlots(int leftCol, int topRow) {
         // Player inventory
-        addSlotBox(playerinv, 9, leftCol, topRow, 9, 18, 3, 18);
+        addSlotBox(playerinv, 10, leftCol, topRow, 9, 18, 3, 18);
 
         // Hotbar
         topRow += 58;
         addSlotRange(playerinv, 0, leftCol, topRow, 9, 18);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public int getSmeltProgressionScaled() {
-        if (progress <= 0 || MaxTime <= 0) {
-            return 0;
-        }
-        return (MaxTime - progress) * 24 / MaxTime;
     }
 }

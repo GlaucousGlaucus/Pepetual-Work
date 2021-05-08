@@ -1,8 +1,12 @@
 {
     "item.pwork.nexorels_staff": "Nexorel's Staff",
-    "block.pwork.wither_furnace": "Wither Furnace",
 
-    "screens.pwork.wither_furnace": "Wither Furnace",
+
+    "block.pwork.wither_furnace": "Wither Furnace",
+    "block.pwork.wither_crafting_table": "Wither Workbench",
+
+    "screen.pwork.wither_furnace": "Wither Furnace",
+    "screen.pwork.wither_crafting_table": "Wither Workbench",
 
     "itemGroup.perpetuals_work": "Perpetual's Work... Yeah"
 }

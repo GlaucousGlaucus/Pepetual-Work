@@ -4,28 +4,26 @@ package com.nexorel.pwork.content.blocks.WitherFurnace;
 import com.nexorel.pwork.PRegister;
 import com.nexorel.pwork.content.Recipes.WitheringRecipe;
 import net.minecraft.block.BlockState;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.omg.CORBA.PERSIST_STORE;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,7 +39,8 @@ public class WitherFurnaceTile extends TileEntity implements ITickableTileEntity
 
     Inventory inventory = new Inventory(wrapper.getItem(0), wrapper.getItem(1), wrapper.getItem(2));
 
-    private int counter = 5;
+    public int currentProgress;
+    public int MaxProgressTime = 100;
 
     private final IRecipeType<? extends WitheringRecipe> recipeType;
 
@@ -60,15 +59,23 @@ public class WitherFurnaceTile extends TileEntity implements ITickableTileEntity
     public void tick() {
         if (level != null && !level.isClientSide) {
 
-            ItemStack primaryInput = this.itemHandler.getStackInSlot(0).copy();
-            ItemStack secondaryInput = this.itemHandler.getStackInSlot(1);
             ItemStack output = this.itemHandler.getStackInSlot(2);
 
             if (this.getRecipe(this.itemHandler.getStackInSlot(0)) != null) {
                 ItemStack Result = this.getRecipe(this.itemHandler.getStackInSlot(0)).getResultItem();
-                itemHandler.insertItem(2, Result.copy(), false);
-                itemHandler.extractItem(0, 1, false);
-                setChanged();
+                if (output.getStack().getCount() < 64) {
+                    if (output.sameItem(Result) || output.isEmpty()) {
+                        if (this.currentProgress != this.MaxProgressTime) {
+                            this.currentProgress++;
+                            this.setChanged();
+                        } else {
+                            this.currentProgress = 0;
+                            itemHandler.insertItem(2, Result.copy(), false);
+                            itemHandler.extractItem(0, 1, false);
+                            setChanged();
+                        }
+                    }
+                }
             }
         }
         this.setChanged();
@@ -94,7 +101,6 @@ public class WitherFurnaceTile extends TileEntity implements ITickableTileEntity
         if (stack == null) {
             return null;
         }
-
         Set<IRecipe<?>> recipes = findRecipesByType(PRegister.WITHERING_TYPE, this.level);
         for (IRecipe<?> iRecipe : recipes) {
             WitheringRecipe recipe = (WitheringRecipe) iRecipe;
@@ -114,12 +120,14 @@ public class WitherFurnaceTile extends TileEntity implements ITickableTileEntity
     @Override
     public void load(BlockState state, CompoundNBT tag) {
         itemHandler.deserializeNBT(tag.getCompound("inv"));
+        currentProgress = tag.getInt("currentProgress");
         super.load(state, tag);
     }
 
     @Override
     public CompoundNBT save(CompoundNBT tag) {
         tag.put("inv", itemHandler.serializeNBT());
+        tag.putInt("currentProgress", currentProgress);
         return super.save(tag);
     }
 

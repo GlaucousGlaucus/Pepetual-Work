@@ -1,6 +1,5 @@
-package com.nexorel.pwork.content.blocks.WitherFurnace;
+package com.nexorel.pwork.content.blocks.WitheringTable;
 
-import com.nexorel.pwork.PRegister;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -14,8 +13,6 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -28,13 +25,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-import javax.naming.ldap.PagedResultsControl;
 import java.util.List;
 
-public class WitherFurnaceBlock extends Block {
+public class WitheringTable extends Block {
+    private static final ITextComponent CONTAINER_TITLE = new TranslationTextComponent("container.wither_crafting_table");
 
-    public WitherFurnaceBlock() {
-        super(Properties.of(Material.METAL).sound(SoundType.ANVIL).strength(2.0F).lightLevel(state -> state.getValue(BlockStateProperties.POWERED) ? 14:0));
+    public WitheringTable() {
+        super(Properties.of(Material.NETHER_WOOD)
+                .sound(SoundType.WOOD)
+                .instabreak()
+        );
     }
 
     @Override
@@ -45,12 +45,12 @@ public class WitherFurnaceBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new WitherFurnaceTile();
+        return new WitheringTableTile();
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable IBlockReader reader, List<ITextComponent> list, ITooltipFlag flag) {
-        list.add(new TranslationTextComponent("screen.pwork.wither_furnace"));
+        list.add(new TranslationTextComponent("screen.pwork.wither_crafting_table"));
     }
 
     @SuppressWarnings("deprecation")
@@ -58,17 +58,17 @@ public class WitherFurnaceBlock extends Block {
     public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
         if (!world.isClientSide) {
             TileEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof WitherFurnaceTile) {
+            if (tileEntity instanceof WitheringTableTile) {
                 INamedContainerProvider containerProvider = new INamedContainerProvider() {
                     @Override
                     public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen.pwork.wither_furnace");
+                        return new TranslationTextComponent("screen.pwork.wither_crafting_table");
                     }
 
                     @Nullable
                     @Override
                     public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-                        return new WitherFurnaceContainer(windowID, playerInventory, playerEntity, (WitherFurnaceTile) world.getBlockEntity(pos));
+                        return new WitheringTableContainer(windowID, playerInventory, playerEntity, (WitheringTableTile) world.getBlockEntity(pos));
                     }
                 };
                 NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getBlockPos());
@@ -90,10 +90,5 @@ public class WitherFurnaceBlock extends Block {
             }
             super.onRemove(state, world, pos, newState, isMoving);
         }
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.POWERED);
     }
 }

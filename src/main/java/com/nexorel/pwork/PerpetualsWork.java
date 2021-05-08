@@ -1,15 +1,13 @@
 package com.nexorel.pwork;
 
 import com.nexorel.pwork.Setup.ClientSetup;
-import com.nexorel.pwork.content.blocks.WitherFurnace.WitherFurnaceScreen;
+import com.nexorel.pwork.content.Entities.boss.Necron.NecronEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -37,6 +35,9 @@ public class PerpetualsWork
     private void setup(final FMLCommonSetupEvent event)
     {
        //oregen stup here
+        event.enqueueWork(() -> {
+            GlobalEntityTypeAttributes.put(PRegister.NECRON.get(), NecronEntity.prepareAttributes().build());
+        });
     }
 
     public static final ItemGroup PERPETUALS_WORK = new ItemGroup("perpetuals_work") {
