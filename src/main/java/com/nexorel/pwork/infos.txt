@@ -3,75 +3,10 @@ THis is just a text file that i use to write and paste stuff i find on internet 
 
 Yaw = 0 when the head is looking straight.
 
-     X = cos(yaw)sin(pitch)
+     X = cos(yaw)sin(pitch) OR  X = cos(yRot)sin(xRot)
 
-     Y = cos(pitch)
+     Y = cos(pitch) OR  Y = cos(xRot)
 
-     Z = sin(yaw)sin(pitch)
+     Z = sin(yaw)sin(pitch) OR  Z = sin(yRot)sin(xRot)
 
-     ( -cos(x) = -cos(-x) = cos(-x+π), even though none of those should be necessary for such formulas), but the only error should be a switch in X and Z.
-
-     player.moveEntity(distance*sin(player.pitch)*sin(player.yaw),distance*cos(player.pitch),distance*sin(player.pitch)*sin(player.yaw));
-
-     If it's moving at odd angles try switching x and z.
-
-     int distance = 5;
-     float f1 = MathHelper.cos(-this.rotationYaw * 0.017453292F - (float)Math.PI);
-     float f2 = MathHelper.sin(-this.rotationYaw * 0.017453292F - (float)Math.PI);
-     float f3 = -MathHelper.cos(-this.rotationPitch * 0.017453292F);
-     float f4 = MathHelper.sin(-this.rotationPitch * 0.017453292F);
-     double i = this.posX;
-     double j = this.posY;
-     double k = this.posZ;
-     this.moveEntity(distance*f2*f3,
-     distance*f4,
-     distance*f1*f3);
-
-     try{
-     // Trace for blocks
-     MovingObjectPosition eyeTrace = player.rayTrace(distance, 1.0F);
-     // If no blocks are traced, then eyeTrace is null.
-     if(eyeTrace.hitVec != null){
-     //If a block is found, call the moveEntity below
-     player.moveEntity(eyeTrace.hitVec.xCoord-player.posX, eyeTrace.hitVec.yCoord-player.posY + 1.1, eyeTrace.hitVec.zCoord-player.posZ );
-     }
-     }
-     catch(NullPointerException npe){
-     // Lolz at your NPE, going to throw you whatever set distance forward in the hope to ignore your NPE
-     player.moveEntity(-distance*Math.sin(Math.toRadians(player.rotationYawHead))*Math.cos(Math.toRadians(player.rotationPitch)),-distance*Math.sin(Math.toRadians(player.rotationPitch)), distance*Math.cos(Math.toRadians(player.rotationYawHead))*Math.cos(Math.toRadians(player.rotationPitch)));
-     }
-
-     I think the methods all use radians instead of degrees. There are 360 degrees in a complete circle and there are 2 pi radians (6.283) radians in a full circle.
-
-     radians = degrees * ( pi / 180 ) = 0.0174 radians per degree
-
-
-                          //player.abilities.invulnerable = true;
-                          WitherSkullEntity entity = new WitherSkullEntity(world, player, player.getX(), player.getY() + 2, player.getZ());
-                          entity.shootFromRotation(player, player.xRot, player.yRot, 0, 1.5F, 1F);
-                          world.addFreshEntity(entity);
-                          counter++;
-                          if (counter == 10) {
-                          player.sendMessage(new StringTextComponent("POG"), player.getUUID());
-                          counter = 0;
-                          }
-
-
-    int distance = 5;
-                double x = -distance*Math.sin(Math.toRadians(player.xRot))*Math.cos(Math.toRadians(player.yRot));
-                double y = -distance*Math.sin(Math.toRadians(player.yRot));
-                double z = distance*Math.cos(Math.toRadians(player.xRot))*Math.cos(Math.toRadians(player.yRot));
-
-                /**
-                 *
-                 * Works only in 1st quadrant ie +x and +z
-                 *
-                 * */
-                player.moveTo(player.getX() + x,
-                        player.getY() + y,
-                        player.getZ() + z);
-
-
-IMP : ENTITY RAYTRACE = ENTITY.PICK()
-
-btw it takes 140 lines of code to make a hyperion
+IMP : ENTITY RAYTRACE = ENTITY.PICK() & YAW = YROT, PITCH = XROT

@@ -2,7 +2,7 @@ package com.nexorel.pwork;
 
 import com.nexorel.pwork.content.Entities.boss.Necron.NecronEntity;
 import com.nexorel.pwork.content.blocks.WitherFurnace.WitherFurnaceContainer;
-import com.nexorel.pwork.content.Entities.NexorelsHeado;
+import com.nexorel.pwork.content.Entities.Projectiles.HeadO.NexorelsHeado;
 import com.nexorel.pwork.content.Recipes.WitheringRecipe;
 import com.nexorel.pwork.content.blocks.WitherFurnace.WitherFurnaceBlock;
 import com.nexorel.pwork.content.blocks.WitherFurnace.WitherFurnaceTile;
@@ -11,7 +11,6 @@ import com.nexorel.pwork.content.blocks.WitheringTable.WitheringTableContainer;
 import com.nexorel.pwork.content.blocks.WitheringTable.WitheringTableTile;
 import com.nexorel.pwork.content.items.NexorelsStaff;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
@@ -20,7 +19,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -28,9 +26,6 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Optional;
-import java.util.function.BiFunction;
 
 import static com.nexorel.pwork.PerpetualsWork.PERPETUALS_WORK;
 import static com.nexorel.pwork.Reference.MOD_ID;
@@ -90,10 +85,11 @@ public class PRegister {
     //Entities
 
     public static final RegistryObject<EntityType<NexorelsHeado>> NEXORELS_HEADO = ENTITIES.register("nexorels_heado",
-            () -> EntityType.Builder.of(NexorelsHeado::new, EntityClassification.MISC)
-            .clientTrackingRange(4)
+            () -> EntityType.Builder.<NexorelsHeado>of(NexorelsHeado::new, EntityClassification.MISC)
             .updateInterval(10)
             .sized(0.3125F, 0.3125F)
+                    .clientTrackingRange(10)
+                   // .setCustomClientFactory((spawnEntity, world) -> new NexorelsHeado(world))
                     .build("nexorels_heado"));
     public static final RegistryObject<EntityType<NecronEntity>> NECRON = ENTITIES.register("necron",
             () -> EntityType.Builder.of(NecronEntity::new, EntityClassification.MISC)

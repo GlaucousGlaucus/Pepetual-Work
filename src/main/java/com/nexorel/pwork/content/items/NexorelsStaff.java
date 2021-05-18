@@ -2,6 +2,7 @@
 
 package com.nexorel.pwork.content.items;
 
+import com.nexorel.pwork.content.Entities.Projectiles.HeadO.NexorelsHeado;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -30,7 +31,7 @@ import java.util.List;
 
 public class NexorelsStaff extends Item {
 
-    private String Mode = "Skull Ambush";
+    private String Mode = "";
     private Entity e;
 
     public NexorelsStaff(Properties p_i48487_1_) {
@@ -53,8 +54,7 @@ public class NexorelsStaff extends Item {
                     AxisAlignedBB b = new AxisAlignedBB(player.getX() - 5, player.getY() - 5, player.getZ() - 5, player.getX() + 5, player.getY() + 5, player.getZ() + 5);
                     List<Entity> entities = world.getEntities(e, b);
 
-                    for (int i = 0; i <= entities.size(); i++) {
-                        Entity entity = entities.get(i);
+                    for (Entity entity : entities) {
                         if (entity instanceof ItemEntity) {
                             continue;
 
@@ -62,6 +62,7 @@ public class NexorelsStaff extends Item {
                             continue;
                         } else {
                             entity.hurt(DamageSource.MAGIC, 100.0F);
+                            //world.addFreshEntity(new NexorelsHeado(world, player, entity, player.getDirection().getAxis()));
                         }
                     }
 
@@ -80,15 +81,14 @@ public class NexorelsStaff extends Item {
                     AxisAlignedBB b = new AxisAlignedBB(player.getX() - 5, player.getY() - 5, player.getZ() - 5, player.getX() + 5, player.getY() + 5, player.getZ() + 5);
                     List<Entity> entities = world.getEntities(e, b);
 
-                    for (int i = 0; i <= entities.size(); i++) {
-                        Entity entity = entities.get(i);
+                    for (Entity entity : entities) {
                         if (entity instanceof ItemEntity) {
                             continue;
-
                         } else if (entity instanceof PlayerEntity) {
                             continue;
                         } else {
                             entity.hurt(DamageSource.MAGIC, 100.0F);
+                           // world.addFreshEntity(new NexorelsHeado(world, player, entity, player.getDirection().getAxis()));
                         }
                     }
 
